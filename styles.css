@@ -1,0 +1,61 @@
+body {
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.container {
+    width: 300px;
+    background-color: grey;
+}
+
+.contenedorInput {
+    background-color: #dedede;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    height: 50px;
+}
+
+.inputText {
+    height: 20px;
+}
+
+.error::placeholder {
+    color: red;
+}
+
+.inputBtnAgregar {
+    height: 25px;
+}
+
+.inputCheck {
+    width: 20px;
+    height: 20px;
+}
+
+.tasks {
+    word-wrap: break-word;
+}
+
+.divTareas {
+    padding: 5px;
+    margin-bottom: 10px;
+    background-color: beige;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
+
