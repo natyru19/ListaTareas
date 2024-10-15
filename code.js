@@ -3,32 +3,43 @@ let tareas = document.querySelector(".tasks");
 let agregar = document.querySelector(".inputBtnAgregar");
 var contador = 0;
 let cantidad = document.getElementById("cantidadTareas");
-cantidad.textContent="Cantidad de tareas: " + contador;
-
-
-agregar.addEventListener("click", ()=>{
-    agregarTarea(tareaAgregada.value);
-})
-
-
-
-tareaAgregada.addEventListener("keydown", (e)=>{
-    if(e.key=='Enter'){
-        agregarTarea(tareaAgregada.value);
-    }
-})
-
+let cantTareasPendientes = document.getElementById("cantidadTareasPendientes");
+let cantTareasFinalizadas = document.getElementById("cantidadTareasFinalizadas");
 let listaTareas =[];
 
+
+//#############################-->Funciones
+
+const contarTareasFinalizadas=()=>{
+    let cantFinalizadas =0;
+    for(let i=0; i<listaTareas.length; i++){
+        if(listaTareas[i].realizada){
+            cantFinalizadas++;
+        }
+    }
+    return cantFinalizadas;
+}   
+
+const contarTareasPendientes=()=>{
+    let cantPendientes =0;
+    for(let i=0; i<listaTareas.length; i++){
+        if(!listaTareas[i].realizada){
+            cantPendientes++;
+        }
+    }
+    return cantPendientes;
+}
+
 function agregarTarea(nuevaTarea){
-    renderTarea(nuevaTarea);
-    listaTareas.push(nuevaTarea);
+    let nuevaTareaObjeto = {"nombre": nuevaTarea, "realizada": false}
+    listaTareas.push(nuevaTareaObjeto);
+    renderTarea(nuevaTareaObjeto);
     
 }
 
 function renderTarea(nuevaTarea){
     
-    if(nuevaTarea!='' && nuevaTarea!=undefined){
+    if(nuevaTarea.nombre!='' && nuevaTarea.nombre!=undefined){
      
         let divTareas = document.createElement('div');
         divTareas.classList.add("divTareas");
@@ -37,27 +48,63 @@ function renderTarea(nuevaTarea){
         inputCheck.classList.add("inputCheck");
         inputCheck.setAttribute('type', 'checkbox');
         let texto = document.createElement('p');
-        texto.textContent = nuevaTarea;
+        texto.textContent = nuevaTarea.nombre;
         texto.classList.add("texto");
+        divTareas.addEventListener('click',()=>{
+            nuevaTarea.realizada = !nuevaTarea.realizada
+            inputCheck.checked= !inputCheck.checked;
+            if(nuevaTarea.realizada){
+                texto.classList.add("tareaTachada");
+            }else{
+                texto.classList.remove("tareaTachada");
+            }
+            
+            actualizarContadores();
+        })
+
+        if(nuevaTarea.realizada){
+            texto.classList.add("tareaTachada");
+            inputCheck.checked=true;
+        }
+
         
         let imgEliminar = document.createElement('img');
         imgEliminar.classList.add("img");
         imgEliminar.setAttribute('src', "https://static.vecteezy.com/system/resources/thumbnails/022/159/677/small_2x/3d-illustration-website-ui-kit-trash-bin-png.png");
         imgEliminar.addEventListener('click', ()=>{
-            borrarTarea(nuevaTarea);
+            Swal.fire({
+                title: "Atención!",
+                text: `Seguro de eliminar "${nuevaTarea.nombre}"?`,
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Eliminar"
+              }).then((result) => {
+                  if (result.isConfirmed) {
+                    borrarTarea(nuevaTarea);
+                    Swal.fire({
+                        title: "Eliminado!",
+                        text: "Has borrado la tarea",
+                        icon: "success"
+                    });
+                }
+            });
         })
+        
         
         divTareas.appendChild(inputCheck);
         divTareas.appendChild(texto);
         divTareas.appendChild(imgEliminar);
         
         tareas.appendChild(divTareas);
-
+        
         tareaAgregada.value=''
         tareaAgregada.classList.remove("error");
         tareaAgregada.setAttribute('placeholder', "Ingresa una tarea");
         contador++;
-        cantidad.textContent= "Cantidad de tareas: " + contador;
+        
+        actualizarContadores();
     }else{
         tareaAgregada.setAttribute('placeholder', "Debes ingresar una tarea");
         tareaAgregada.classList.add("error");
@@ -73,26 +120,39 @@ function borrarTarea(tareaAborrar){
     }
     listaTareas = aux;
     refrescarTareas();
+    actualizarContadores();
 }
-
-/*
-REFRESCAR TAREAS(){
-
-    recorro las tareas
-    en cada tarea llamo a  AGREGAR TAREA(pasando la tarea)
-
-
-}
-
-*/
-
-
+   
 const refrescarTareas=()=>{
     tareas.innerHTML ='';
     contador=0;
-    cantidad.textContent="Cantidad de tareas: " + contador;
     
     for(let i=0; i<listaTareas.length; i++){
         renderTarea(listaTareas[i]);
     }
 }
+
+function actualizarContadores(){
+    cantidad.textContent="Cantidad de tareas: " + contador;
+    cantTareasPendientes.textContent="Pendientes: " + contarTareasPendientes();
+    cantTareasFinalizadas.textContent="Finalizadas: " + contarTareasFinalizadas();
+}
+
+//#############################-->Eventos
+
+
+agregar.addEventListener("click", ()=>{
+    agregarTarea(tareaAgregada.value);
+})
+
+tareaAgregada.addEventListener("keydown", (e)=>{
+    if(e.key=='Enter'){
+        agregarTarea(tareaAgregada.value);
+    }
+})
+
+
+
+//#############################-->Ejecuciones
+
+actualizarContadores();

@@ -51,6 +51,7 @@ body {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
+    z-index: 10;
 }
 
 img {
@@ -59,3 +60,16 @@ img {
     object-fit: contain;
 }
 
+.contenedorCantidadTareas {
+    border-top: dotted;
+    margin-top: 25px;
+}
+
+.tareaTachada {
+    color: #C7253E;
+    text-decoration: line-through;
+}
+
+.img{
+    z-index: 20;
+}
