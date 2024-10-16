@@ -6,6 +6,11 @@ let cantidad = document.getElementById("cantidadTareas");
 let cantTareasPendientes = document.getElementById("cantidadTareasPendientes");
 let cantTareasFinalizadas = document.getElementById("cantidadTareasFinalizadas");
 let listaTareas =[];
+let containerFondo = document.querySelector(".containerFondo");
+let containerHeader = document.querySelector(".containerHeader");
+let container = document.querySelector(".container");
+let containerFooter = document.querySelector(".containerFooter");
+
 
 
 //#############################-->Funciones
@@ -98,6 +103,7 @@ function renderTarea(nuevaTarea){
         divTareas.appendChild(imgEliminar);
         
         tareas.appendChild(divTareas);
+        container.appendChild(tareas);
         
         tareaAgregada.value=''
         tareaAgregada.classList.remove("error");
@@ -151,8 +157,14 @@ tareaAgregada.addEventListener("keydown", (e)=>{
     }
 })
 
-
-
 //#############################-->Ejecuciones
 
 actualizarContadores();
+
+// let imgFondo = document.createElement('img');
+// imgFondo.classList.add("imgFondo");
+// imgFondo.setAttribute('src', "./background.png");
+
+
+// container.appendChild(imgFondo);
+

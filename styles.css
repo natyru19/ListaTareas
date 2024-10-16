@@ -9,13 +9,41 @@ body {
     box-sizing: border-box;
 }
 
-.container {
-    width: 300px;
-    background-color: grey;
+.containerHeader {
+    width: 500px;
+    background-image: url("./containerHeader.png");
+    background-size: cover;
+    background-position: top;
+    background-repeat: no-repeat;
+    height: 50px;
+    
 }
 
+.container {
+    width: 500px;
+    background-image: url("./container.png");
+    background-size: cover;
+    background-position: center;
+    background-size: 100%;
+    height: 100%;
+}
+
+.containerFooter {
+    width: 500px;
+    background-image: url("./containerFooter.png");
+    background-size: cover;
+    background-position: bottom;
+    background-repeat: no-repeat;
+    height: 50px;
+}
+
+/* .container .imgFondo {
+    width: 100%;
+    height: 100%;
+} */
+
 .contenedorInput {
-    background-color: #dedede;
+    /* background-color: #dedede; */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -46,8 +74,7 @@ body {
 
 .divTareas {
     padding: 5px;
-    margin-bottom: 10px;
-    background-color: beige;
+    /* background-color: beige; */
     display: flex;
     justify-content: space-evenly;
     align-items: center;
