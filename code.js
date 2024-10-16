@@ -12,7 +12,6 @@ let container = document.querySelector(".container");
 let containerFooter = document.querySelector(".containerFooter");
 
 
-
 //#############################-->Funciones
 
 const contarTareasFinalizadas=()=>{
@@ -45,71 +44,52 @@ function agregarTarea(nuevaTarea){
 function renderTarea(nuevaTarea){
     
     if(nuevaTarea.nombre!='' && nuevaTarea.nombre!=undefined){
-     
         let divTareas = document.createElement('div');
+        let divCheckText = document.createElement('div');
+        divCheckText.classList.add("divCheckText");
         divTareas.classList.add("divTareas");
-        
-        let inputCheck = document.createElement('input');
+        let inputCheck = document.createElement('img');
         inputCheck.classList.add("inputCheck");
-        inputCheck.setAttribute('type', 'checkbox');
+        inputCheck.setAttribute('src', "./unchecked.png");
         let texto = document.createElement('p');
         texto.textContent = nuevaTarea.nombre;
         texto.classList.add("texto");
-        divTareas.addEventListener('click',()=>{
+        divCheckText.addEventListener('click',()=>{
             nuevaTarea.realizada = !nuevaTarea.realizada
-            inputCheck.checked= !inputCheck.checked;
             if(nuevaTarea.realizada){
                 texto.classList.add("tareaTachada");
+                inputCheck.setAttribute('src', "./checked.png");
             }else{
                 texto.classList.remove("tareaTachada");
+                inputCheck.setAttribute('src', "./unchecked.png");
             }
-            
             actualizarContadores();
         })
 
         if(nuevaTarea.realizada){
             texto.classList.add("tareaTachada");
-            inputCheck.checked=true;
+            inputCheck.setAttribute('src', "./checked.png");
         }
-
-        
+        let divImgEliminar = document.createElement('div');
+        divImgEliminar.setAttribute('id', "imgBorrar");
         let imgEliminar = document.createElement('img');
         imgEliminar.classList.add("img");
-        imgEliminar.setAttribute('src', "https://static.vecteezy.com/system/resources/thumbnails/022/159/677/small_2x/3d-illustration-website-ui-kit-trash-bin-png.png");
-        imgEliminar.addEventListener('click', ()=>{
-            Swal.fire({
-                title: "Atención!",
-                text: `Seguro de eliminar "${nuevaTarea.nombre}"?`,
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Eliminar"
-              }).then((result) => {
-                  if (result.isConfirmed) {
-                    borrarTarea(nuevaTarea);
-                    Swal.fire({
-                        title: "Eliminado!",
-                        text: "Has borrado la tarea",
-                        icon: "success"
-                    });
-                }
-            });
+        imgEliminar.setAttribute('src', "./delete.png");
+        divImgEliminar.addEventListener('click', ()=>{
+           confirmarEliminacion(nuevaTarea); //Dispara sweet alert, si confirma ejecuta el borrar()
         })
-        
-        
-        divTareas.appendChild(inputCheck);
-        divTareas.appendChild(texto);
-        divTareas.appendChild(imgEliminar);
-        
+
+        divCheckText.appendChild(inputCheck);   
+        divCheckText.appendChild(texto);
+        divTareas.appendChild(divCheckText)
+        divImgEliminar.appendChild(imgEliminar);
+        divTareas.appendChild(divImgEliminar);
         tareas.appendChild(divTareas);
         container.appendChild(tareas);
-        
         tareaAgregada.value=''
         tareaAgregada.classList.remove("error");
         tareaAgregada.setAttribute('placeholder', "Ingresa una tarea");
         contador++;
-        
         actualizarContadores();
     }else{
         tareaAgregada.setAttribute('placeholder', "Debes ingresar una tarea");
@@ -128,7 +108,7 @@ function borrarTarea(tareaAborrar){
     refrescarTareas();
     actualizarContadores();
 }
-   
+
 const refrescarTareas=()=>{
     tareas.innerHTML ='';
     contador=0;
@@ -142,6 +122,27 @@ function actualizarContadores(){
     cantidad.textContent="Cantidad de tareas: " + contador;
     cantTareasPendientes.textContent="Pendientes: " + contarTareasPendientes();
     cantTareasFinalizadas.textContent="Finalizadas: " + contarTareasFinalizadas();
+}
+
+function confirmarEliminacion(tareaAborrar){
+    Swal.fire({
+        title: "Atención!",
+        text: `Seguro de eliminar "${tareaAborrar.nombre}"?`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Eliminar"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            borrarTarea(tareaAborrar);
+            Swal.fire({
+                title: "Eliminado!",
+                text: "Has borrado la tarea",
+                icon: "success"
+            });
+        }
+    });
 }
 
 //#############################-->Eventos
