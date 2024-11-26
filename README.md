@@ -14,6 +14,7 @@ Implementé diversas funciones para gestionar y mostrar diferentes comportamient
 + Contabilizar las tareas finalizadas.
 
 La tarea pasa a estar finalizada una vez que el usuario la marca como hecha.
+
 Además se permite la eliminación de una tarea en específico. En este caso, se despliega un mensaje para que el usuario pueda confirmar o rechazar dicha operación.
 
 <ins>Herramientas utilizadas:</ins> HTML, CSS, JAVASCRIPT
