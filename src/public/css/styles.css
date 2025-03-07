@@ -1,0 +1,134 @@
+body {
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.containerHeader {
+    width: 500px;
+    background-image: url("./containerHeader.png");
+    background-size: cover;
+    background-position: top;
+    background-repeat: no-repeat;
+    height: 125px;
+    
+}
+
+.container {
+    width: 500px;
+    min-height: 600px;
+    background-image: url("./container.png");
+    background-size: cover;
+    background-position: center;
+    background-size: 100%;
+    
+}
+
+.containerFooter {
+    width: 500px;
+    background-image: url("./containerFooter.png");
+    background-size: cover;
+    background-position: bottom;
+    background-repeat: no-repeat;
+    height: 28px;
+}
+
+/* .container .imgFondo {
+    width: 100%;
+    height: 100%;
+} */
+
+.contenedorInput {
+    /* background-color: #dedede; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    height: 50px;
+}
+
+.inputText {
+    height: 20px;
+}
+
+.error::placeholder {
+    color: #C7253E;
+}
+
+.inputBtnAgregar {
+    height: 25px;
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid brown;
+    border-right: 2px solid brown;
+}
+
+.inputCheck {
+    width: 25px;
+    height: 25px;
+    margin-right: 10px;
+}
+
+.tasks {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.divCheckText{
+    width: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.divTareas {
+    width: 75%;
+    padding: 5px;
+    /* background-color: beige; */
+    display: flex;
+}
+
+.texto{
+    width: 75%;
+    word-wrap: break-word;
+    font-family: "Noto Sans";
+}
+
+.contenedorCantidadTareas {
+    border-top: dotted;
+    margin-top: 25px;
+}
+
+.tareaTachada {
+    color: #C7253E;
+    text-decoration: line-through;
+}
+
+.img{
+    object-fit: contain;
+}
+
+#imgBorrar{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+}
+
+#imgBorrar img{
+    width: 25px;
+}
+
+.hiddenChecked {
+    visibility: hidden;
+}
+
+.hiddenUnchecked {
+    visibility: hidden;
+}
