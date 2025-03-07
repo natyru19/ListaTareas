@@ -1,8 +1,18 @@
+Lista de Tareas V0.2
+
+Al iniciar traigo las tareas de mongo.
+
+Se guarda la tarea ingresada en la base de datos.
+
+Agrego readme y mejoro estructura.
+
+Se conecta con el backend usando fetch para agregar una tarea.
+
+
 Lista de Tareas V0.1
 
-(`-----`)
 
-**Lista de tareas**
+# LISTA DE TAREAS
 > *Proyecto propio*
 
 Este proyecto lo desarrollé principalmente utilizando JavaScript.

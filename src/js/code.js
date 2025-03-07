@@ -19,22 +19,37 @@ const contarTareasFinalizadas=()=>{
     for(let i=0; i<listaTareas.length; i++){
         if(listaTareas[i].realizada){
             cantFinalizadas++;
-        }
-    }
+        };
+    };
     return cantFinalizadas;
-}   
+};   
 
 const contarTareasPendientes=()=>{
     let cantPendientes =0;
     for(let i=0; i<listaTareas.length; i++){
         if(!listaTareas[i].realizada){
             cantPendientes++;
-        }
-    }
+        };
+    };
     return cantPendientes;
-}
+};
 
-function agregarTarea(nuevaTarea){
+async function tasksFromDb() {
+    const response = await fetch('http://localhost:8080/api/tasks');
+    const responseData = await response.json();
+    console.log(responseData.data);
+    
+    for(let i = 0; i<responseData.data.length;i++){
+        let tareaFormateada = {nombre: responseData.data[i].description, realizada: responseData.data[i].done};
+        listaTareas.push(tareaFormateada);
+    };    
+
+    for(let i = 0; i< listaTareas.length; i++){
+        renderTarea(listaTareas[i]);
+    };
+};
+
+async function agregarTarea(nuevaTarea){
     let nuevaTareaObjeto = {"nombre": nuevaTarea, "realizada": false};
     listaTareas.push(nuevaTareaObjeto);
     const url = 'http://localhost:8080/api/tasks';
@@ -43,10 +58,10 @@ function agregarTarea(nuevaTarea){
         headers : {"Content-Type" : "application/json"},
         body : JSON.stringify({description : nuevaTareaObjeto.nombre })
     };
-    fetch(url, opts);
+    let response = await fetch(url, opts);
 
     renderTarea(nuevaTareaObjeto);
-}
+};
 
 function renderTarea(nuevaTarea){
     
@@ -57,7 +72,7 @@ function renderTarea(nuevaTarea){
         divTareas.classList.add("divTareas");
         let inputCheck = document.createElement('img');
         inputCheck.classList.add("inputCheck");
-        inputCheck.setAttribute('src', "./unchecked.png");
+        inputCheck.setAttribute('src', "src/img/unchecked.png");
         let texto = document.createElement('p');
         texto.textContent = nuevaTarea.nombre;
         texto.classList.add("texto");
@@ -65,35 +80,35 @@ function renderTarea(nuevaTarea){
             nuevaTarea.realizada = !nuevaTarea.realizada
             if(nuevaTarea.realizada){
                 texto.classList.add("tareaTachada");
-                inputCheck.setAttribute('src', "./checked.png");
+                inputCheck.setAttribute('src', "src/img/checked.png");
             }else{
                 texto.classList.remove("tareaTachada");
-                inputCheck.setAttribute('src', "./unchecked.png");
-            }
+                inputCheck.setAttribute('src', "src/img/unchecked.png");
+            };
             actualizarContadores();
-        })
+        });
 
         if(nuevaTarea.realizada){
             texto.classList.add("tareaTachada");
-            inputCheck.setAttribute('src', "./checked.png");
-        }
+            inputCheck.setAttribute('src', "src/img/checked.png");
+        };
         let divImgEliminar = document.createElement('div');
         divImgEliminar.setAttribute('id', "imgBorrar");
         let imgEliminar = document.createElement('img');
         imgEliminar.classList.add("img");
-        imgEliminar.setAttribute('src', "./delete.png");
+        imgEliminar.setAttribute('src', "src/img/delete.png");
         divImgEliminar.addEventListener('click', ()=>{
-           confirmarEliminacion(nuevaTarea); //Dispara sweet alert, si confirma ejecuta el borrar()
-        })
+            confirmarEliminacion(nuevaTarea);
+        });
 
         divCheckText.appendChild(inputCheck);   
         divCheckText.appendChild(texto);
-        divTareas.appendChild(divCheckText)
+        divTareas.appendChild(divCheckText);
         divImgEliminar.appendChild(imgEliminar);
         divTareas.appendChild(divImgEliminar);
         tareas.appendChild(divTareas);
         container.appendChild(tareas);
-        tareaAgregada.value=''
+        tareaAgregada.value='';
         tareaAgregada.classList.remove("error");
         tareaAgregada.setAttribute('placeholder', "Ingresa una tarea");
         contador++;
@@ -101,20 +116,20 @@ function renderTarea(nuevaTarea){
     }else{
         tareaAgregada.setAttribute('placeholder', "Debes ingresar una tarea");
         tareaAgregada.classList.add("error");
-    }
-}
+    };
+};
 
 function borrarTarea(tareaAborrar){
     let aux=[];
     for(let i=0; i< listaTareas.length; i++){
         if(listaTareas[i] != tareaAborrar){
             aux.push(listaTareas[i])
-        }
-    }
+        };
+    };
     listaTareas = aux;
     refrescarTareas();
     actualizarContadores();
-}
+};
 
 const refrescarTareas=()=>{
     tareas.innerHTML ='';
@@ -122,14 +137,14 @@ const refrescarTareas=()=>{
     
     for(let i=0; i<listaTareas.length; i++){
         renderTarea(listaTareas[i]);
-    }
-}
+    };
+};
 
 function actualizarContadores(){
     cantidad.textContent="Cantidad de tareas: " + contador;
     cantTareasPendientes.textContent="Pendientes: " + contarTareasPendientes();
     cantTareasFinalizadas.textContent="Finalizadas: " + contarTareasFinalizadas();
-}
+};
 
 function confirmarEliminacion(tareaAborrar){
     Swal.fire({
@@ -148,31 +163,25 @@ function confirmarEliminacion(tareaAborrar){
                 text: "Has borrado la tarea",
                 icon: "success"
             });
-        }
+        };
     });
-}
+};
 
 //#############################-->Eventos
 
 
 agregar.addEventListener("click", ()=>{
     agregarTarea(tareaAgregada.value);
-})
+});
 
 tareaAgregada.addEventListener("keydown", (e)=>{
     if(e.key=='Enter'){
         agregarTarea(tareaAgregada.value);
     }
-})
+});
 
 //#############################-->Ejecuciones
 
+tasksFromDb();
 actualizarContadores();
-
-// let imgFondo = document.createElement('img');
-// imgFondo.classList.add("imgFondo");
-// imgFondo.setAttribute('src', "./background.png");
-
-
-// container.appendChild(imgFondo);
 
