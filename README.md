@@ -3,6 +3,8 @@
 
 V0.2
 
+Se permite modificar la tarea a hecha o pendiente.
+
 Se elimina de la base de datos la tarea indicada.
 
 Al iniciar traigo las tareas de mongo.

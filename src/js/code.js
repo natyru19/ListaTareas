@@ -51,12 +51,15 @@ async function tasksFromDb() {
 async function agregarTarea(nuevaTarea){
     let nuevaTareaObjeto = {"nombre": nuevaTarea, "realizada": false};
     listaTareas.push(nuevaTareaObjeto);
+
     const url = 'http://localhost:8080/api/tasks';
+
     const opts = {
         method : 'POST',
         headers : {"Content-Type" : "application/json"},
         body : JSON.stringify({description : nuevaTareaObjeto.nombre })
     };
+
     let response = await fetch(url, opts);
 
     renderTarea(nuevaTareaObjeto);
@@ -75,17 +78,35 @@ function renderTarea(nuevaTarea){
         let texto = document.createElement('p');
         texto.textContent = nuevaTarea.nombre;
         texto.classList.add("texto");
-        divCheckText.addEventListener('click',()=>{
-            nuevaTarea.realizada = !nuevaTarea.realizada
-            if(nuevaTarea.realizada){
-                alert(nuevaTarea.id) //id de la tarea a marcar como done
-                texto.classList.add("tareaTachada");
-                inputCheck.setAttribute('src', "src/img/checked.png");
-            }else{
-                texto.classList.remove("tareaTachada");
-                inputCheck.setAttribute('src', "src/img/unchecked.png");
-            };
-            actualizarContadores();
+        divCheckText.addEventListener('click', async (e)=>{
+            e.preventDefault();
+
+            try {
+                nuevaTarea.realizada = !nuevaTarea.realizada
+                const opts = {
+                    method : 'PUT',
+                    headers : {"Content-Type" : "application/json"},
+                    body : JSON.stringify({description: nuevaTarea.nombre, done: nuevaTarea.realizada})
+                }
+                const response = await fetch(`http://localhost:8080/api/tasks?id=${nuevaTarea.id}`, opts);
+                if(response.status==201){
+                    
+                    if(nuevaTarea.realizada){
+                        texto.classList.add("tareaTachada");
+                        inputCheck.setAttribute('src', "src/img/checked.png");
+                    }else{
+                        texto.classList.remove("tareaTachada");
+                        inputCheck.setAttribute('src', "src/img/unchecked.png");
+                    };
+                }else{
+                    alert("ERROR - intente nuevamente")
+                }
+        
+                actualizarContadores();
+
+            } catch (error) {
+                alert("Intente nuevamente")
+            }
         });
 
         if(nuevaTarea.realizada){
@@ -129,7 +150,7 @@ async function borrarTarea(tareaAborrar){
     };
     listaTareas = aux;    
     
-    const response = await fetch(`http://localhost:8080/api/tasks/?id=${tareaAborrar.id}`, {method: "DELETE"});
+    const response = await fetch(`http://localhost:8080/api/tasks?id=${tareaAborrar.id}`, {method: "DELETE"});
     const responseData = await response.json();
     
     refrescarTareas();
