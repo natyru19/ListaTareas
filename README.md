@@ -1,4 +1,9 @@
-Lista de Tareas V0.2
+# LISTA DE TAREAS
+> *Proyecto propio*
+
+V0.2
+
+Se elimina de la base de datos la tarea indicada.
 
 Al iniciar traigo las tareas de mongo.
 
@@ -8,12 +13,9 @@ Agrego readme y mejoro estructura.
 
 Se conecta con el backend usando fetch para agregar una tarea.
 
+(`----------------------------------------------------------------`)
 
-Lista de Tareas V0.1
-
-
-# LISTA DE TAREAS
-> *Proyecto propio*
+V0.1
 
 Este proyecto lo desarrollé principalmente utilizando JavaScript.
 

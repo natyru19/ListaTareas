@@ -36,11 +36,10 @@ const contarTareasPendientes=()=>{
 
 async function tasksFromDb() {
     const response = await fetch('http://localhost:8080/api/tasks');
-    const responseData = await response.json();
-    console.log(responseData.data);
+    const responseData = await response.json();    
     
     for(let i = 0; i<responseData.data.length;i++){
-        let tareaFormateada = {nombre: responseData.data[i].description, realizada: responseData.data[i].done};
+        let tareaFormateada = {nombre: responseData.data[i].description, realizada: responseData.data[i].done, id: responseData.data[i]._id};
         listaTareas.push(tareaFormateada);
     };    
 
@@ -79,6 +78,7 @@ function renderTarea(nuevaTarea){
         divCheckText.addEventListener('click',()=>{
             nuevaTarea.realizada = !nuevaTarea.realizada
             if(nuevaTarea.realizada){
+                alert(nuevaTarea.id) //id de la tarea a marcar como done
                 texto.classList.add("tareaTachada");
                 inputCheck.setAttribute('src', "src/img/checked.png");
             }else{
@@ -119,14 +119,19 @@ function renderTarea(nuevaTarea){
     };
 };
 
-function borrarTarea(tareaAborrar){
+async function borrarTarea(tareaAborrar){
+    
     let aux=[];
     for(let i=0; i< listaTareas.length; i++){
         if(listaTareas[i] != tareaAborrar){
             aux.push(listaTareas[i])
         };
     };
-    listaTareas = aux;
+    listaTareas = aux;    
+    
+    const response = await fetch(`http://localhost:8080/api/tasks/?id=${tareaAborrar.id}`, {method: "DELETE"});
+    const responseData = await response.json();
+    
     refrescarTareas();
     actualizarContadores();
 };
