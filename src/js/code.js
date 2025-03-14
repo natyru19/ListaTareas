@@ -35,7 +35,7 @@ const contarTareasPendientes=()=>{
 };
 
 async function tasksFromDb() {
-    const response = await fetch('http://localhost:8080/api/tasks');
+    const response = await fetch('https://listatareasback.onrender.com/api/tasks');
     const responseData = await response.json();    
     
     for(let i = 0; i<responseData.data.length;i++){
@@ -52,7 +52,7 @@ async function agregarTarea(nuevaTarea){
     let nuevaTareaObjeto = {"nombre": nuevaTarea, "realizada": false};
     listaTareas.push(nuevaTareaObjeto);
 
-    const url = 'http://localhost:8080/api/tasks';
+    const url = 'https://listatareasback.onrender.com/api/tasks';
 
     const opts = {
         method : 'POST',
@@ -72,12 +72,23 @@ function renderTarea(nuevaTarea){
         let divCheckText = document.createElement('div');
         divCheckText.classList.add("divCheckText");
         divTareas.classList.add("divTareas");
+        let divTextTask = document.createElement('div');
+        divTextTask.classList.add("divTextTask");
+        let divImgCheck = document.createElement('div');
+        divImgCheck.classList.add("divImgCheck");
         let inputCheck = document.createElement('img');
         inputCheck.classList.add("inputCheck");
         inputCheck.setAttribute('src', "src/img/unchecked.png");
         let texto = document.createElement('p');
         texto.textContent = nuevaTarea.nombre;
         texto.classList.add("texto");
+        let textoErrorTareaRealizada = document.createElement('p');
+        textoErrorTareaRealizada.textContent = `Hubo un error, por favor intente nuevamente`;
+        textoErrorTareaRealizada.classList.add("textoErrorTareaRealizada");
+        let divContainerError = document.createElement('div');
+        divContainerError.classList.add("divContainerError");
+        
+
         divCheckText.addEventListener('click', async (e)=>{
             e.preventDefault();
 
@@ -88,7 +99,7 @@ function renderTarea(nuevaTarea){
                     headers : {"Content-Type" : "application/json"},
                     body : JSON.stringify({description: nuevaTarea.nombre, done: nuevaTarea.realizada})
                 }
-                const response = await fetch(`http://localhost:8080/api/tasks?id=${nuevaTarea.id}`, opts);
+                const response = await fetch(`https://listatareasback.onrender.com/api/tasks?id=${nuevaTarea.id}`, opts);
                 if(response.status==201){
                     
                     if(nuevaTarea.realizada){
@@ -99,12 +110,13 @@ function renderTarea(nuevaTarea){
                         inputCheck.setAttribute('src', "src/img/unchecked.png");
                     };
                 }else{
-                    alert("ERROR - intente nuevamente")
+                    divCheckText.classList.add("divCheckTextError");
                 }
         
                 actualizarContadores();
 
             } catch (error) {
+                divCheckText.classList.add("divCheckTextError");
                 alert("Intente nuevamente")
             }
         });
@@ -122,8 +134,12 @@ function renderTarea(nuevaTarea){
             confirmarEliminacion(nuevaTarea);
         });
 
-        divCheckText.appendChild(inputCheck);   
+        divTareas.appendChild(divImgCheck);
+        divImgCheck.appendChild(inputCheck);
+        divTareas.appendChild(divTextTask);
         divCheckText.appendChild(texto);
+        divContainerError.appendChild(textoErrorTareaRealizada);
+        divCheckText.appendChild(divContainerError);
         divTareas.appendChild(divCheckText);
         divImgEliminar.appendChild(imgEliminar);
         divTareas.appendChild(divImgEliminar);
@@ -150,7 +166,7 @@ async function borrarTarea(tareaAborrar){
     };
     listaTareas = aux;    
     
-    const response = await fetch(`http://localhost:8080/api/tasks?id=${tareaAborrar.id}`, {method: "DELETE"});
+    const response = await fetch(`https://listatareasback.onrender.com/api/tasks?id=${tareaAborrar.id}`, {method: "DELETE"});
     const responseData = await response.json();
     
     refrescarTareas();
